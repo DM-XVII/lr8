@@ -1,0 +1,13 @@
+
+{% extends 'base.html' %}
+{% load i18n %}
+{% block content %}
+<div class="container mt-5">
+    <h2>{% if form.instance.pk %}{% trans "Edit Book"%} {% else %}{% trans "Add New Book"%}{% endif %}</h2>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-primary">{% trans "Save"%}</button>
+    </form>
+</div>
+{% endblock %}

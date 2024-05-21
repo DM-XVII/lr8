@@ -1,0 +1,9 @@
+
+{% extends 'base.html' %}
+{% load i18n %}
+{% block content %}
+<div class="container mt-5">
+    <h2>{{ author.name }}</h2>
+    <a href="{% url 'author_list' %}" class="btn btn-secondary">{% trans "Back to Author List"%}</a>
+</div>
+{% endblock %}

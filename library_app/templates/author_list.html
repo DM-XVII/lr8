@@ -1,0 +1,25 @@
+
+{% extends 'base.html' %}
+{% load i18n %}
+{% block content %}
+<div class="container mt-5">
+    <h2>{% trans "Author List"%}</h2>
+    <a href="{% url 'author_create' %}" class="btn btn-primary mb-3">{% trans "Add New Author"%}</a>
+    <ul class="list-group">
+        {% for author in authors %}
+        <li class="list-group-item">
+            <a href="{% url 'author_detail' author.pk %}">{{ author.name }}</a>
+            <span class="float-right">
+                {%if is_manager%}
+                    <a href="{% url 'author_update' author.pk %}" class="btn btn-warning btn-sm">{% trans "Edit"%}</a>
+                    <a href="{% url 'author_delete' author.pk %}" class="btn btn-danger btn-sm">{% trans "Delete"%}</a>
+                {%endif%}
+                
+            </span>
+        </li>
+        {% endfor %}
+    </ul>
+</div>
+{% endblock %}
+
+

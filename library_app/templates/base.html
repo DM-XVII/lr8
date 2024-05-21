@@ -1,0 +1,79 @@
+{% load i18n %}
+{% get_current_language as current_language %}
+{% get_available_languages as available_languages %}
+<!DOCTYPE html>
+<html lang="{{ current_language }}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Library App{% endblock %}</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <style>
+        /* Add your custom CSS styles here */
+    </style>
+</head>
+<body>
+    <!-- Navigation bar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <a class="navbar-brand" href="#">Library App</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'book_list' %}">{% trans "Books" %}</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'author_list' %}">{% trans "Authors" %}</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'category_list' %}">{% trans "Categories" %}</a>
+                </li>
+            </ul>
+
+            {% if user.is_authenticated %}
+            <!-- If user is authenticated, show buttons for changing username and password, and logout button -->
+            <div class="navbar-nav">
+                <a href="{% url 'change_username' %}" class="nav-item nav-link btn btn-outline-info my-2 my-sm-0 mx-1">{% trans "Change Username" %}</a>
+                <a href="{% url 'change_password' %}" class="nav-item nav-link btn btn-outline-info my-2 my-sm-0 mx-1">{% trans "Change Password" %}</a>
+                <form action="{% url 'logout' %}" method="post" class="form-inline my-2 my-lg-0">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-outline-danger my-2 my-sm-0">{% trans "Logout" %}</button>
+                </form>
+            </div>
+            {% else %}
+            <!-- If user is not authenticated, show login and register buttons -->
+            <div class="navbar-nav">
+                <a href="{% url 'login' %}" class="nav-item nav-link btn btn-outline-success my-2 my-sm-0 mx-1">{% trans "Login" %}</a>
+                <a href="{% url 'register' %}" class="nav-item nav-link btn btn-outline-primary my-2 my-sm-0 mx-1">{% trans "Register" %}</a>
+            </div>
+            {% endif %}
+        </div>
+
+        <form action="{% url 'set_language' %}" method="post" class="form-inline my-2 my-lg-0">
+            {% csrf_token %}
+            <select name="language" class="form-control mr-sm-2">
+                {% for language in available_languages %}
+                    <option value="{{ language.0 }}" {% if language.0 == current_language %}selected{% endif %}>{{ language.1 }}</option>
+                {% endfor %}
+            </select>
+            <button type="submit" class="btn btn-outline-success my-2 my-sm-0">{% trans "Change Language" %}</button>
+        </form>
+    </nav>
+
+    <!-- Page content -->
+    <div class="container-fluid">
+        {% block content %}
+        {% endblock %}
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
